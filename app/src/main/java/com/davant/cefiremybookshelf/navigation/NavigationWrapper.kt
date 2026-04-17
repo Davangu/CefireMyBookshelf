@@ -5,7 +5,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.davant.cefiremybookshelf.navigation.Routes.*
-import com.davant.cefiremybookshelf.screens.HomeScreen
+import com.davant.cefiremybookshelf.screens.addedit.AddEditScreen
+import com.davant.cefiremybookshelf.screens.home.HomeScreen
 import com.davant.cefiremybookshelf.screens.login.LoginScreen
 
 @Composable
@@ -21,9 +22,15 @@ fun NavigationWrapper() {
                 }
             }
             entry<Home> { key ->
-                HomeScreen(key.name) {
-                    backStack.removeAt(backStack.lastIndex)
-                }
+                HomeScreen(
+                    name = key.name,
+                    onBack = { backStack.removeAt(backStack.lastIndex) },
+                    goToAddScreen = { backStack.add(AddEdit) },
+                    goToEditScreen = { backStack.add(AddEdit) }
+                )
+            }
+            entry<AddEdit> {
+                AddEditScreen()
             }
         }
     )

@@ -9,4 +9,7 @@ sealed class Routes: NavKey {
 
     @Serializable
     data class Home(val name:String):Routes()
+
+    @Serializable
+    data object AddEdit:Routes()
 }

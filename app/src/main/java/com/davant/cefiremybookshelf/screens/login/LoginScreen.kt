@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,7 +50,7 @@ fun Header() {
     IconButton(modifier = Modifier.padding(top=30.dp),
         onClick = { exitProcess(0) }) {
         Icon(
-            imageVector = Icons.Filled.Close,
+            painter = painterResource(R.drawable.ic_close),
             contentDescription = "Close application"
         )
     }
