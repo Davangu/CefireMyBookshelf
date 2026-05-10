@@ -78,6 +78,5 @@ fun BookCard(book:Book) {
                 text = "${book.year}",
                 textAlign = TextAlign.End)
         }
-
     }
 }

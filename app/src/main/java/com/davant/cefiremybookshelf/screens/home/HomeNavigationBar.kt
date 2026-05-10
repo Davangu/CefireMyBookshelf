@@ -40,7 +40,7 @@ fun HomeNavigationBar(contentIndex:Int, onItemSelected: (Int) -> Unit) {
                 Icon(painter = painterResource(R.drawable.ic_not_fav),
                     contentDescription = "Favs")
             },
-            label = { Text("All")},
+            label = { Text("Favs")},
             colors = navBarItemColors
         )
         NavigationBarItem(
@@ -50,7 +50,7 @@ fun HomeNavigationBar(contentIndex:Int, onItemSelected: (Int) -> Unit) {
                 Icon(painter = painterResource(R.drawable.ic_read),
                     contentDescription = "Read")
             },
-            label = { Text("All")},
+            label = { Text("Read")},
             colors = navBarItemColors
         )
     }
