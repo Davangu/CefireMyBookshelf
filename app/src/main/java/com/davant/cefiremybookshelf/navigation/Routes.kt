@@ -1,6 +1,7 @@
 package com.davant.cefiremybookshelf.navigation
 
 import androidx.navigation3.runtime.NavKey
+import com.davant.cefiremybookshelf.domain.model.Book
 import kotlinx.serialization.Serializable
 
 sealed class Routes: NavKey {
@@ -11,5 +12,5 @@ sealed class Routes: NavKey {
     data class Home(val name:String):Routes()
 
     @Serializable
-    data object AddEdit:Routes()
+    data class AddEdit(val book: Book = Book()):Routes()
 }

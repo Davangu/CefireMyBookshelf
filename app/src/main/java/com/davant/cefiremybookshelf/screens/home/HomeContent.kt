@@ -2,7 +2,6 @@ package com.davant.cefiremybookshelf.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.davant.cefiremybookshelf.R
-import com.davant.cefiremybookshelf.model.Book
+import com.davant.cefiremybookshelf.domain.model.Book
 
 
 @Composable

@@ -39,15 +39,14 @@ fun UserName(userName:String, updateUserName: (String) -> Unit) {
 }
 
 @Composable
-fun Password() {
-    var password by rememberSaveable { mutableStateOf("") }
+fun Password(password: String, updatePassword: (String) -> Unit) {
     var passVisibility by rememberSaveable { mutableStateOf(false) }
     TextField(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 48.dp,
             vertical = 12.dp),
         value = password,
-        onValueChange = { password = it },
+        onValueChange = { updatePassword(it) },
         placeholder = { Text(text = "Password",
             color = Color.Gray,
             fontStyle = FontStyle.Italic)},
@@ -74,9 +73,10 @@ fun RegisterButton() {
 }
 
 @Composable
-fun LoginButton(userName:String, doLogin: (String) -> Unit) {
+fun LoginButton(userName: String, doLogin: (String) -> Unit, isLoginEnable: Boolean) {
     Button(modifier = Modifier.width(100.dp),
-        onClick = { doLogin(userName) }) {
+        onClick = { doLogin(userName) },
+        enabled = isLoginEnable) {
         Text("Login")
     }
 }

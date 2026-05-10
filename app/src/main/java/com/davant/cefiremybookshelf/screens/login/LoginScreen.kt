@@ -15,9 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,7 +24,7 @@ import com.davant.cefiremybookshelf.R
 import kotlin.system.exitProcess
 
 @Composable
-fun LoginScreen(doLogin: (String) -> Unit) {
+fun LoginScreen(loginViewModel: LoginViewModel, doLogin: (String) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -39,7 +37,7 @@ fun LoginScreen(doLogin: (String) -> Unit) {
             .fillMaxWidth()
             .weight(1f),
             contentAlignment = Alignment.TopCenter) {
-            Body(doLogin)
+            Body(doLogin, loginViewModel)
             Footer(Modifier.align(Alignment.BottomCenter))
         }
     }
@@ -64,16 +62,18 @@ fun Logo(modifier: Modifier) {
 }
 
 @Composable
-fun Body(doLogin: (String) -> Unit) {
-    var userName by rememberSaveable { mutableStateOf("") }
+fun Body(doLogin: (String) -> Unit, loginViewModel: LoginViewModel) {
+    val userName by loginViewModel.userName.observeAsState("")
+    val password by loginViewModel.password.observeAsState("")
+    val isLoginEnable by loginViewModel.isLoginEnable.observeAsState(false)
     Column(modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
-        UserName(userName) { userName = it }
-        Password()
+        UserName(userName) { loginViewModel.onLoginChange(it, password) }
+        Password(password) { loginViewModel.onLoginChange(userName, it) }
         Row() {
             RegisterButton()
             Spacer(modifier = Modifier.width(24.dp))
-            LoginButton(userName, doLogin)
+            LoginButton(userName, doLogin, isLoginEnable)
         }
         HorizontalDivider(modifier = Modifier.padding(18.dp),
             thickness = 1.dp)

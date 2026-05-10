@@ -1,6 +1,6 @@
 package com.davant.cefiremybookshelf.screens.home
 
-import com.davant.cefiremybookshelf.model.Book
+import com.davant.cefiremybookshelf.domain.model.Book
 
 
 fun filterBookList(bookList: List<Book>, value: Int) =
