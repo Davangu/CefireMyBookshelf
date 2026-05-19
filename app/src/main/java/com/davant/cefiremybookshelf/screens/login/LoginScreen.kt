@@ -24,7 +24,7 @@ import com.davant.cefiremybookshelf.R
 import kotlin.system.exitProcess
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel, doLogin: (String) -> Unit) {
+fun LoginScreen(loginViewModel: LoginViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -37,7 +37,7 @@ fun LoginScreen(loginViewModel: LoginViewModel, doLogin: (String) -> Unit) {
             .fillMaxWidth()
             .weight(1f),
             contentAlignment = Alignment.TopCenter) {
-            Body(doLogin, loginViewModel)
+            Body(loginViewModel)
             Footer(Modifier.align(Alignment.BottomCenter))
         }
     }
@@ -62,18 +62,19 @@ fun Logo(modifier: Modifier) {
 }
 
 @Composable
-fun Body(doLogin: (String) -> Unit, loginViewModel: LoginViewModel) {
+fun Body(loginViewModel: LoginViewModel) {
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
     val isLoginEnable by loginViewModel.isLoginEnable.observeAsState(false)
+    val isLoginError by loginViewModel.isLoginError.observeAsState(false)
     Column(modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
-        UserName(userName) { loginViewModel.onLoginChange(it, password) }
-        Password(password) { loginViewModel.onLoginChange(userName, it) }
+        UserName(userName, isLoginError) { loginViewModel.onLoginChange(it, password) }
+        Password(password, isLoginError) { loginViewModel.onLoginChange(userName, it) }
         Row() {
-            RegisterButton()
+            RegisterButton() { loginViewModel.registerUser() }
             Spacer(modifier = Modifier.width(24.dp))
-            LoginButton(userName, doLogin, isLoginEnable)
+            LoginButton(isLoginEnable) { loginViewModel.loginUser() }
         }
         HorizontalDivider(modifier = Modifier.padding(18.dp),
             thickness = 1.dp)

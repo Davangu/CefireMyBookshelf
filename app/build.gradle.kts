@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.crashlytics)
+
 }
 
 android {
@@ -46,6 +49,12 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     // Serialization
     implementation(libs.kotlinx.serialization.core)
+
+    //FIREBASE
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

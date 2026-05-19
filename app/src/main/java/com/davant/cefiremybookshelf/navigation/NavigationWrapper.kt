@@ -13,6 +13,7 @@ import com.davant.cefiremybookshelf.screens.home.HomeScreen
 import com.davant.cefiremybookshelf.screens.home.HomeViewModel
 import com.davant.cefiremybookshelf.screens.login.LoginScreen
 import com.davant.cefiremybookshelf.screens.login.LoginViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun NavigationWrapper() {
@@ -22,10 +23,12 @@ fun NavigationWrapper() {
         onBack = { backStack.removeAt(backStack.lastIndex) },
         entryProvider = entryProvider {
             entry<Login> {
-                LoginScreen(LoginViewModel()) { userName ->
-                    backStack.add(Home(userName))
-                }
+                LoginScreen(LoginViewModel(auth = FirebaseAuth.getInstance(),
+                    navigateToHome = { userName -> backStack.add(Home(userName))
+                    }))
             }
+
+
             entry<Home> { key ->
                 HomeScreen(
                     name = key.name,

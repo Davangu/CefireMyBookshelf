@@ -26,73 +26,99 @@ import androidx.compose.ui.unit.dp
 import com.davant.cefiremybookshelf.R
 
 @Composable
-fun UserName(userName:String, updateUserName: (String) -> Unit) {
-    TextField(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 48.dp,
-            vertical = 12.dp),
+fun UserName(userName: String, isLoginError: Boolean, updateUserName: (String) -> Unit) {
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 48.dp,
+                vertical = 12.dp
+            ),
         value = userName,
         onValueChange = { updateUserName(it) },
-        placeholder = { Text(text = "User name",
-            color = Color.Gray,
-            fontStyle = FontStyle.Italic)})
+        placeholder = {
+            Text(
+                text = "User name",
+                color = Color.Gray,
+                fontStyle = FontStyle.Italic
+            )
+        },
+        isError = isLoginError
+    )
 }
 
 @Composable
-fun Password(password: String, updatePassword: (String) -> Unit) {
+fun Password(password: String, isLoginError: Boolean, updatePassword: (String) -> Unit) {
     var passVisibility by rememberSaveable { mutableStateOf(false) }
-    TextField(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 48.dp,
-            vertical = 12.dp),
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 48.dp,
+                vertical = 12.dp
+            ),
         value = password,
         onValueChange = { updatePassword(it) },
-        placeholder = { Text(text = "Password",
-            color = Color.Gray,
-            fontStyle = FontStyle.Italic)},
-        trailingIcon = {
-            val eyeIcon = if(passVisibility) R.drawable.ic_visible
-                else R.drawable.ic_not_visible
-            Icon(painter = painterResource(eyeIcon),
-                contentDescription = if(passVisibility) "Password is visible"
-            else "Passowrd is hidden",
-                modifier = Modifier.clickable { passVisibility = !passVisibility})
+        placeholder = {
+            Text(
+                text = "Password",
+                color = Color.Gray,
+                fontStyle = FontStyle.Italic
+            )
         },
-        visualTransformation = if(passVisibility) PasswordVisualTransformation()
-        else VisualTransformation.None
+        trailingIcon = {
+            val eyeIcon = if (passVisibility) R.drawable.ic_visible
+            else R.drawable.ic_not_visible
+            Icon(
+                painter = painterResource(eyeIcon),
+                contentDescription = if (passVisibility) "Password is visible"
+                else "Passowrd is hidden",
+                modifier = Modifier.clickable { passVisibility = !passVisibility })
+        },
+        visualTransformation = if (passVisibility) PasswordVisualTransformation()
+        else VisualTransformation.None,
+        isError = isLoginError
     )
 }
+
 @Composable
-fun RegisterButton() {
-    Button(modifier = Modifier.width(100.dp),
+fun RegisterButton(onRegisterButtonClick: () -> Unit) {
+    Button(
+        modifier = Modifier.width(100.dp),
         onClick = {
-            // Registrar nuevo usuario
+            onRegisterButtonClick()
         }) {
         Text("Register")
     }
 }
 
 @Composable
-fun LoginButton(userName: String, doLogin: (String) -> Unit, isLoginEnable: Boolean) {
-    Button(modifier = Modifier.width(100.dp),
-        onClick = { doLogin(userName) },
-        enabled = isLoginEnable) {
+fun LoginButton(isLoginEnable: Boolean, doLogin: () -> Unit) {
+    Button(
+        modifier = Modifier.width(100.dp),
+        onClick = { doLogin() },
+        enabled = isLoginEnable
+    ) {
         Text("Login")
     }
 }
 
 @Composable
 fun SocialLogin() {
-    Row(modifier = Modifier.clickable{
+    Row(modifier = Modifier.clickable {
         // Acción para loguearse con Google
     }) {
-        Image(modifier = Modifier
-            .size(24.dp),
+        Image(
+            modifier = Modifier
+                .size(24.dp),
             painter = painterResource(R.drawable.google_logo),
-            contentDescription = "Google logo")
-        Text("Login with Google",
+            contentDescription = "Google logo"
+        )
+        Text(
+            "Login with Google",
             fontStyle = FontStyle.Italic,
             modifier = Modifier
-            .padding(horizontal = 8.dp))
+                .padding(horizontal = 8.dp)
+        )
     }
 }
