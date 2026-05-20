@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import com.davant.cefiremybookshelf.domain.model.Book
 
@@ -19,14 +20,11 @@ import com.davant.cefiremybookshelf.domain.model.Book
 @Composable
 fun HomeScreen(
     name: String,
-    onBack: () -> NavKey,
-    goToAddScreen: () -> Unit,
-    goToEditScreen: () -> Unit,
     homeViewModel: HomeViewModel
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val contentIndex = homeViewModel.contentIndex.observeAsState(0)
-    val bookList = homeViewModel.bookList.observeAsState(listOf())
+    val contentIndex = homeViewModel.contentIndex.collectAsStateWithLifecycle(0)
+    val bookList = homeViewModel.bookList.collectAsStateWithLifecycle(listOf())
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -35,8 +33,8 @@ fun HomeScreen(
             HomeTopBar(
                 scrollBehavior = scrollBehavior,
                 user = getNameCleared(name),
-                onBack = onBack,
-                goToEditScreen = goToEditScreen
+                onBack = { homeViewModel.goBack() },
+                goToEditScreen = { homeViewModel.goToEditScreen(Book()) }
             )
         },
         bottomBar = {
@@ -44,9 +42,11 @@ fun HomeScreen(
                 homeViewModel.onContentIndexChange(it)
             }
         },
-        floatingActionButton = { HomeAddBookFAB(goToAddScreen) },
+        floatingActionButton = { HomeAddBookFAB(){ homeViewModel.goToEditScreen(Book()) } },
         floatingActionButtonPosition = FabPosition.Start
     ) { innerPadding ->
-        HomeContent(innerPadding, bookList.value)
+        HomeContent(innerPadding, bookList.value) {
+            homeViewModel.goToEditScreen(it)
+        }
     }
 }
