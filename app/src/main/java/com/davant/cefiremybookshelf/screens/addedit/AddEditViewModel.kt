@@ -67,6 +67,8 @@ class AddEditViewModel(
                 _isError.value = true
             if(_book.value!!.cover.isEmpty())
                 _isError.value = true
+            if(_book.value!!.year == null)
+                _isError.value = true
         }
         return _isError.value == false
     }

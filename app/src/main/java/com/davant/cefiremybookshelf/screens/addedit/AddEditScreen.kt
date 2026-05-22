@@ -57,31 +57,42 @@ fun AddEditScreen(addEditViewModel: AddEditViewModel) {
                 value = book.title,
                 onValueChange = { addEditViewModel.updateBook(book.copy(title = it)) },
                 placeholder = { Text("Title") },
-                isError = isError)
+                isError = isError
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = book.author,
                 onValueChange = { addEditViewModel.updateBook(book.copy(author = it)) },
                 placeholder = { Text("Author") },
-                isError = isError)
+                isError = isError
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = book.year.toString(),
-                onValueChange = { addEditViewModel.updateBook(book.copy(year = it.toInt())) },
+                value = if (book.year == null) ""
+                else book.year.toString(),
+                onValueChange = {
+                    if (it.isEmpty())
+                        addEditViewModel.updateBook(book.copy(year = null))
+                    else
+                        addEditViewModel.updateBook(book.copy(year = it.toInt()))
+                },
                 placeholder = { Text("Year") },
-                isError = isError)
+                isError = isError
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = book.isbn,
                 onValueChange = { addEditViewModel.updateBook(book.copy(isbn = it)) },
                 placeholder = { Text("ISBN") },
-                isError = isError)
+                isError = isError
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = book.cover,
                 onValueChange = { addEditViewModel.updateBook(book.copy(cover = it)) },
                 placeholder = { Text("Cover") },
-                isError = isError)
+                isError = isError
+            )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Favourite?",

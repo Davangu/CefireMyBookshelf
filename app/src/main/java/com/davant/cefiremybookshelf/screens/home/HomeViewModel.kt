@@ -13,8 +13,9 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: BooksRepository,
+    val userName: String,
     private val userId: String,
-    val goToEditScreen: (Book) -> Unit,
+    val goToAddEditScreen: (Book) -> Unit,
     val goBack: () -> Unit
 ) : ViewModel() {
 

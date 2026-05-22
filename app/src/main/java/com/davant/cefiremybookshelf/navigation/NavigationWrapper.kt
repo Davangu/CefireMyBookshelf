@@ -38,11 +38,11 @@ fun NavigationWrapper() {
             }
             entry<Home> { key ->
                 HomeScreen(
-                    name = key.name,
                     homeViewModel = HomeViewModel(
                         repository = repository,
+                        userName = key.name,
                         userId = auth.currentUser?.uid ?: "",
-                        goToEditScreen = { backStack.add(AddEdit(it)) },
+                        goToAddEditScreen = { backStack.add(AddEdit(it)) },
                         goBack = { backStack.removeAt(backStack.lastIndex) }
                     )
                 )
