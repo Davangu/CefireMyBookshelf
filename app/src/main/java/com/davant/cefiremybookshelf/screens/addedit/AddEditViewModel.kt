@@ -1,16 +1,23 @@
 package com.davant.cefiremybookshelf.screens.addedit
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.davant.cefiremybookshelf.domain.model.Book
+import com.davant.cefiremybookshelf.domain.model.Cover
 import com.davant.cefiremybookshelf.domain.repository.BooksRepository
+import com.davant.cefiremybookshelf.domain.repository.CoversRepository
 import kotlinx.coroutines.launch
 
 class AddEditViewModel(
     private val inBook: Book,
     private val repository: BooksRepository,
+    private val coversRepository: CoversRepository,
     private val userId: String,
     val navigateBack: () -> Unit
 ) : ViewModel() {
@@ -23,8 +30,18 @@ class AddEditViewModel(
     private val _isError = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
 
+    var coverUIState: CoverUIState by mutableStateOf(CoverUIState.Idle)
+
+
     init {
         _newBook.value = inBook.title.isEmpty()
+    }
+
+    sealed interface CoverUIState {
+        data class Success(val cover: Cover) : CoverUIState
+        object Error : CoverUIState
+        object Loading : CoverUIState
+        object Idle : CoverUIState
     }
 
     fun updateBook(book: Book) {
@@ -71,5 +88,25 @@ class AddEditViewModel(
                 _isError.value = true
         }
         return _isError.value == false
+    }
+
+    fun getCoverId() {
+        coverUIState = CoverUIState.Loading
+        viewModelScope.launch {
+            try {
+                coverUIState = CoverUIState.Success(
+                    coversRepository.getCoverByIsbn(_book.value!!.isbn)
+                )
+                _book.value = _book.value!!.copy(
+                    cover = coversRepository.path +
+                            (coverUIState as CoverUIState.Success).cover.id +
+                            coversRepository.extension
+                )
+            } catch (e: Exception) {
+                coverUIState = CoverUIState.Error
+                Log.e("AddEditViewModel",
+                    "Error getting cover: ${e.message}")
+            }
+        }
     }
 }

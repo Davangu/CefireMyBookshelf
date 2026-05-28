@@ -42,7 +42,11 @@ fun HomeScreen(
                 homeViewModel.onContentIndexChange(it)
             }
         },
-        floatingActionButton = { HomeAddBookFAB(){ homeViewModel.goToAddEditScreen(Book()) } },
+        floatingActionButton = {
+            HomeAddBookFAB() {
+                homeViewModel.goToAddEditScreen(Book())
+            }
+        },
         floatingActionButtonPosition = FabPosition.Start
     ) { innerPadding ->
         HomeContent(innerPadding, bookList) {

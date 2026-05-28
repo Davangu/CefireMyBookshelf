@@ -5,6 +5,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.davant.cefiremybookshelf.data.firestore.FirebaseBooksRepository
+import com.davant.cefiremybookshelf.data.openlibrary.covers.CoverOLApi
+import com.davant.cefiremybookshelf.data.openlibrary.covers.CoverOLService
+import com.davant.cefiremybookshelf.data.openlibrary.covers.OpenLibraryRepository
 import com.davant.cefiremybookshelf.domain.model.Book
 import com.davant.cefiremybookshelf.navigation.Routes.*
 import com.davant.cefiremybookshelf.screens.addedit.AddEditScreen
@@ -21,6 +24,7 @@ fun NavigationWrapper() {
     val auth = FirebaseAuth.getInstance()
     val firestore = FirebaseFirestore.getInstance()
     val repository = FirebaseBooksRepository(firestore)
+    val coversRepo = OpenLibraryRepository(CoverOLApi.coverOLService)
 
     val backStack = rememberNavBackStack(Login)
     NavDisplay(
@@ -52,6 +56,7 @@ fun NavigationWrapper() {
                     AddEditViewModel(
                         inBook = key.book,
                         repository = repository,
+                        coversRepository = coversRepo,
                         userId = auth.currentUser?.uid ?: "",
                         navigateBack = { backStack.removeAt(backStack.lastIndex) }
                     )
