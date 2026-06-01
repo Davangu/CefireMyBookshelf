@@ -17,6 +17,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,6 +41,7 @@ fun AddEditScreen(addEditViewModel: AddEditViewModel) {
     val isError by addEditViewModel.isError.observeAsState(false)
     val book by addEditViewModel.book.observeAsState(Book())
     val coverUIState = addEditViewModel.coverUIState
+    val bookInfoUIState = addEditViewModel.bookInfoUIState
 
     Box(
         modifier = Modifier
@@ -60,6 +63,35 @@ fun AddEditScreen(addEditViewModel: AddEditViewModel) {
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TextField(
+                    modifier = Modifier.weight(1f),
+                    value = book.isbn,
+                    onValueChange = { addEditViewModel.updateBook(book.copy(isbn = it)) },
+                    placeholder = { Text("ISBN") },
+                    isError = isError || bookInfoUIState is BookInfoUIState.Error
+                )
+                Box(contentAlignment = Alignment.Center) {
+                    Button(
+                        modifier = Modifier.size(48.dp),
+                        onClick = { addEditViewModel.getBookInfo() }) {
+                    }
+                    Icon(
+                        painterResource(R.drawable.ic_find),
+                        "Find",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    if (bookInfoUIState is BookInfoUIState.Loading)
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(36.dp),
+                            color = Secondary
+                        )
+                }
+            }
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = book.title,
@@ -87,31 +119,28 @@ fun AddEditScreen(addEditViewModel: AddEditViewModel) {
                 placeholder = { Text("Year") },
                 isError = isError
             )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = book.isbn,
-                onValueChange = { addEditViewModel.updateBook(book.copy(isbn = it)) },
-                placeholder = { Text("ISBN") },
-                isError = isError
-            )
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 TextField(
                     modifier = Modifier.weight(1f),
                     value = book.cover,
                     onValueChange = { addEditViewModel.updateBook(book.copy(cover = it)) },
                     placeholder = { Text("Cover") },
-                    isError = isError
+                    isError = isError || coverUIState is CoverUIState.Error
                 )
                 Box(contentAlignment = Alignment.Center) {
-                    Button(modifier = Modifier.size(48.dp),
+                    Button(
+                        modifier = Modifier.size(48.dp),
                         onClick = { addEditViewModel.getCoverId() }) {
                     }
-                    Icon(painterResource(R.drawable.ic_find),
+                    Icon(
+                        painterResource(R.drawable.ic_find),
                         "Find",
                         modifier = Modifier.size(24.dp)
                     )
-                    if(coverUIState is CoverUIState.Loading)
+                    if (coverUIState is CoverUIState.Loading)
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .size(36.dp),
@@ -119,7 +148,7 @@ fun AddEditScreen(addEditViewModel: AddEditViewModel) {
                         )
                 }
             }
-            if(coverUIState is CoverUIState.Error)
+            if (coverUIState is CoverUIState.Error)
                 Text(
                     text = "Error: ISBN not found",
                     color = Color.Red

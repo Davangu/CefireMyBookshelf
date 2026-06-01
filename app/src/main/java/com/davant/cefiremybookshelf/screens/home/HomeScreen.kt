@@ -33,6 +33,7 @@ fun HomeScreen(
             HomeTopBar(
                 scrollBehavior = scrollBehavior,
                 user = getNameCleared(homeViewModel.userName),
+                books = bookList.size,
                 onBack = { homeViewModel.goBack() },
                 goToEditScreen = { homeViewModel.goToAddEditScreen(Book()) }
             )

@@ -10,7 +10,7 @@ import retrofit2.http.Path
 private const val BASE_URL = "https://covers.openlibrary.org/b/"
 
 val json = Json {
-    ignoreUnknownKeys = true // This is the fix
+    ignoreUnknownKeys = true
     isLenient = true
 }
 
