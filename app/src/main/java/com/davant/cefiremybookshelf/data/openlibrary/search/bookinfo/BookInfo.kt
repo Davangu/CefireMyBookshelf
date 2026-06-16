@@ -12,8 +12,6 @@ data class BookInfo(
     val authorKey: List<String>,
     @SerialName("author_name")
     val authorName: List<String>,
-    @SerialName("cover_edition_key")
-    val coverEditionKey: String,
     @SerialName("cover_i")
     val coverId: Int,
     @SerialName("ebook_access")

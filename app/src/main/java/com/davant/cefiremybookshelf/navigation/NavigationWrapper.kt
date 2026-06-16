@@ -1,16 +1,18 @@
 package com.davant.cefiremybookshelf.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.davant.cefiremybookshelf.data.firestore.FirebaseBooksRepository
 import com.davant.cefiremybookshelf.data.openlibrary.covers.CoverOLApi
-import com.davant.cefiremybookshelf.data.openlibrary.covers.CoverOLService
 import com.davant.cefiremybookshelf.data.openlibrary.covers.OpenLibraryRepository
 import com.davant.cefiremybookshelf.data.openlibrary.search.OLSearchApi
 import com.davant.cefiremybookshelf.data.openlibrary.search.OLSearchRepository
-import com.davant.cefiremybookshelf.domain.model.Book
 import com.davant.cefiremybookshelf.navigation.Routes.*
 import com.davant.cefiremybookshelf.screens.addedit.AddEditScreen
 import com.davant.cefiremybookshelf.screens.addedit.AddEditViewModel
@@ -23,11 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun NavigationWrapper() {
-    val auth = FirebaseAuth.getInstance()
-    val firestore = FirebaseFirestore.getInstance()
-    val repository = FirebaseBooksRepository(firestore)
-    val coversRepo = OpenLibraryRepository(CoverOLApi.coverOLService)
-    val searchRepo = OLSearchRepository(OLSearchApi.searchService)
+    val auth = remember { FirebaseAuth.getInstance() }
+    val firestore = remember { FirebaseFirestore.getInstance() }
+    val repository = remember(firestore) { FirebaseBooksRepository(firestore) }
+    val coversRepo = remember { OpenLibraryRepository(CoverOLApi.coverOLService) }
+    val searchRepo = remember { OLSearchRepository(OLSearchApi.searchService) }
 
     val backStack = rememberNavBackStack(Login)
     NavDisplay(
@@ -35,27 +37,27 @@ fun NavigationWrapper() {
         onBack = { backStack.removeAt(backStack.lastIndex) },
         entryProvider = entryProvider {
             entry<Login> {
-                LoginScreen(
+                LoginScreen(viewModel {
                     LoginViewModel(
                         auth = auth,
                         navigateToHome = { userName ->
                             backStack.add(Home(userName))
                         })
-                )
+                })
             }
             entry<Home> { key ->
-                HomeScreen(
-                    homeViewModel = HomeViewModel(
+                HomeScreen(viewModel {
+                    HomeViewModel(
                         repository = repository,
                         userName = key.name,
                         userId = auth.currentUser?.uid ?: "",
                         goToAddEditScreen = { backStack.add(AddEdit(it)) },
                         goBack = { backStack.removeAt(backStack.lastIndex) }
                     )
-                )
+                })
             }
             entry<AddEdit> { key ->
-                AddEditScreen(
+                AddEditScreen(viewModel(key = key.book.id) {
                     AddEditViewModel(
                         inBook = key.book,
                         repository = repository,
@@ -64,7 +66,7 @@ fun NavigationWrapper() {
                         userId = auth.currentUser?.uid ?: "",
                         navigateBack = { backStack.removeAt(backStack.lastIndex) }
                     )
-                )
+                })
             }
         }
     )
