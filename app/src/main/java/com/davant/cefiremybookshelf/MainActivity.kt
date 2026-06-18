@@ -10,10 +10,11 @@ import com.davant.cefiremybookshelf.ui.theme.CefireMyBookshelfTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = this
         enableEdgeToEdge()
         setContent {
             CefireMyBookshelfTheme {
-                NavigationWrapper()
+                NavigationWrapper(context)
             }
         }
     }

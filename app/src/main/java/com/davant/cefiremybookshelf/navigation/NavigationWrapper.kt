@@ -2,13 +2,15 @@ package com.davant.cefiremybookshelf.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.davant.cefiremybookshelf.MainActivity
 import com.davant.cefiremybookshelf.data.firestore.FirebaseBooksRepository
+import com.davant.cefiremybookshelf.data.local.LocalPreferencesRepository
+import com.davant.cefiremybookshelf.data.local.database.PreferencesDatabase
 import com.davant.cefiremybookshelf.data.openlibrary.covers.CoverOLApi
 import com.davant.cefiremybookshelf.data.openlibrary.covers.OpenLibraryRepository
 import com.davant.cefiremybookshelf.data.openlibrary.search.OLSearchApi
@@ -24,12 +26,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun NavigationWrapper() {
+fun NavigationWrapper(context: MainActivity) {
     val auth = remember { FirebaseAuth.getInstance() }
     val firestore = remember { FirebaseFirestore.getInstance() }
     val repository = remember(firestore) { FirebaseBooksRepository(firestore) }
     val coversRepo = remember { OpenLibraryRepository(CoverOLApi.coverOLService) }
     val searchRepo = remember { OLSearchRepository(OLSearchApi.searchService) }
+    val preferencesRepository = remember { LocalPreferencesRepository(
+        preferencesDao = PreferencesDatabase.getDatabase(context).preferencesDao()
+    )}
 
     val backStack = rememberNavBackStack(Login)
     NavDisplay(

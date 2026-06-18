@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
-
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -44,6 +44,11 @@ android {
 }
 
 dependencies {
+    // ROOM
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+
     // Navigation3
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
@@ -65,6 +70,7 @@ dependencies {
 
     // COIL: IMAGENES DESDE URL
     implementation(libs.coil.compose)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
