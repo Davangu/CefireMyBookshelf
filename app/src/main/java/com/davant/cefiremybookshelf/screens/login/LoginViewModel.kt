@@ -2,6 +2,7 @@ package com.davant.cefiremybookshelf.screens.login
 
 import android.util.Log
 import android.util.Patterns
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -60,8 +61,8 @@ class LoginViewModel(
                         Preferences(
                             id = auth.currentUser?.uid ?: "",
                             name = _userName.value.toString(),
-                            primaryColor = Main,
-                            secondaryColor = Secondary
+                            primaryColor = Main.toArgb(),
+                            secondaryColor = Secondary.toArgb()
                         )
                     )
                 }

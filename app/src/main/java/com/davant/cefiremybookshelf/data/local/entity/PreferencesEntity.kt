@@ -1,6 +1,5 @@
 package com.davant.cefiremybookshelf.data.local.entity
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -24,15 +23,15 @@ fun PreferencesEntity.toPreferences() =
     Preferences(
         id = id,
         name = name,
-        primaryColor = Color(primaryColor),
-        secondaryColor = Color(secondaryColor)
+        primaryColor = primaryColor,
+        secondaryColor = secondaryColor
     )
 
 fun Preferences.toPreferencesEntity() =
     PreferencesEntity(
         id = id,
         name = name,
-        primaryColor = primaryColor.toArgb(),
-        secondaryColor = secondaryColor.toArgb()
+        primaryColor = primaryColor,
+        secondaryColor = secondaryColor
     )
 

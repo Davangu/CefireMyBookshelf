@@ -23,8 +23,11 @@ fun HomeTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     user: String,
     books: Int,
+    primaryColor: Color,
+    secondaryColor: Color,
     onBack: () -> Unit,
-    goToEditScreen: () -> Unit
+    goToEditScreen: () -> Unit,
+    goToPreferencesScreen: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -43,15 +46,15 @@ fun HomeTopBar(
                 Icon(painter = painterResource(R.drawable.ic_edit),
                     contentDescription = "Edit book")
             }
-            IconButton(onClick = {  }) {
-                Icon(painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = "Delete book")
+            IconButton(onClick = { goToPreferencesScreen() }) {
+                Icon(painter = painterResource(R.drawable.ic_account),
+                    contentDescription = "Preferences")
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Main,
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryColor,
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White,
-            titleContentColor = Secondary),
+            titleContentColor = secondaryColor),
         scrollBehavior = scrollBehavior
     )
 }

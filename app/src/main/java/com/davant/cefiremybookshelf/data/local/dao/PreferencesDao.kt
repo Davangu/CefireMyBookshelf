@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PreferencesDao {
+    @Query("SELECT * FROM preferences WHERE id = :id")
+    suspend fun getPreferencesByUser(id:String): PreferencesEntity
 
     @Query("SELECT * FROM preferences WHERE id = :id")
-    fun getPreferencesByUser(id:String): Flow<PreferencesEntity>
+    fun getPreferencesByUserStream(id: String): Flow<PreferencesEntity>
 
     @Insert
     suspend fun insertPreferences(preferences: PreferencesEntity)

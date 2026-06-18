@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.map
 
 class LocalPreferencesRepository(
     private val preferencesDao: PreferencesDao): PreferencesRepository {
+
     override fun getPreferencesByUser(userId: String): Flow<Preferences> =
-        preferencesDao.getPreferencesByUser(userId).map { it.toPreferences() }
+        preferencesDao.getPreferencesByUserStream(userId).map {
+            it.toPreferences()
+        }
 
     override suspend fun addPreferences(preferences: Preferences) {
         preferencesDao.insertPreferences(preferences.toPreferencesEntity())
@@ -24,5 +27,4 @@ class LocalPreferencesRepository(
     override suspend fun deletePreferences(preferences: Preferences) {
         preferencesDao.deletePreferences(preferences.toPreferencesEntity())
     }
-
 }

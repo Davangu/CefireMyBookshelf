@@ -14,15 +14,19 @@ import com.davant.cefiremybookshelf.ui.theme.Secondary
 
 
 @Composable
-fun HomeNavigationBar(contentIndex:Int, onItemSelected: (Int) -> Unit) {
+fun HomeNavigationBar(
+    contentIndex: Int,
+    primaryColor: Color,
+    secondaryColor: Color,
+    onItemSelected: (Int) -> Unit) {
     val navBarItemColors = NavigationBarItemDefaults.colors(
         selectedIconColor = Color.White,
         selectedTextColor = Color.White,
         unselectedIconColor = Color.White,
         unselectedTextColor = Color.White,
-        indicatorColor = Secondary)
+        indicatorColor = secondaryColor)
 
-    NavigationBar(containerColor = Main) {
+    NavigationBar(containerColor = primaryColor) {
         NavigationBarItem(
             selected = contentIndex == 0 ,
             onClick = { onItemSelected(0) },

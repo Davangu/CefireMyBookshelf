@@ -21,6 +21,8 @@ import com.davant.cefiremybookshelf.screens.home.HomeScreen
 import com.davant.cefiremybookshelf.screens.home.HomeViewModel
 import com.davant.cefiremybookshelf.screens.login.LoginScreen
 import com.davant.cefiremybookshelf.screens.login.LoginViewModel
+import com.davant.cefiremybookshelf.screens.preferences.PreferencesScreen
+import com.davant.cefiremybookshelf.screens.preferences.PreferencesViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -54,9 +56,11 @@ fun NavigationWrapper(context: MainActivity) {
                 HomeScreen(viewModel {
                     HomeViewModel(
                         repository = repository,
+                        preferencesRepository = preferencesRepository,
                         userName = key.name,
                         userId = auth.currentUser?.uid ?: "",
                         goToAddEditScreen = { backStack.add(AddEdit(it)) },
+                        goToPreferencesScreen = { backStack.add(PreferencesUI(it)) },
                         goBack = { backStack.removeAt(backStack.lastIndex) }
                     )
                 })
@@ -69,6 +73,15 @@ fun NavigationWrapper(context: MainActivity) {
                         coversRepository = coversRepo,
                         searchRepository = searchRepo,
                         userId = auth.currentUser?.uid ?: "",
+                        navigateBack = { backStack.removeAt(backStack.lastIndex) }
+                    )
+                })
+            }
+            entry<PreferencesUI> { key ->
+                PreferencesScreen(viewModel {
+                    PreferencesViewModel(
+                        initialPreferences = key.preferences,
+                        preferencesRepository = preferencesRepository,
                         navigateBack = { backStack.removeAt(backStack.lastIndex) }
                     )
                 })
