@@ -5,11 +5,18 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.davant.cefiremybookshelf.data.local.LocalPreferencesRepository
+import com.davant.cefiremybookshelf.domain.model.Preferences
+import com.davant.cefiremybookshelf.ui.theme.Main
+import com.davant.cefiremybookshelf.ui.theme.Secondary
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val auth: FirebaseAuth,
-    private val navigateToHome: (String) -> Unit
+    private val navigateToHome: (String) -> Unit,
+    private val preferencesRepository: LocalPreferencesRepository
 ) : ViewModel() {
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName
@@ -47,6 +54,18 @@ class LoginViewModel(
                 else
                     "Registry failed ${result.exception.toString()}"
             )
+            if(result.isSuccessful) {
+                viewModelScope.launch {
+                    preferencesRepository.addPreferences(
+                        Preferences(
+                            id = auth.currentUser?.uid ?: "",
+                            name = _userName.value.toString(),
+                            primaryColor = Main,
+                            secondaryColor = Secondary
+                        )
+                    )
+                }
+            }
         }
     }
 

@@ -2,7 +2,6 @@ package com.davant.cefiremybookshelf.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -47,7 +46,8 @@ fun NavigationWrapper(context: MainActivity) {
                         auth = auth,
                         navigateToHome = { userName ->
                             backStack.add(Home(userName))
-                        })
+                        },
+                        preferencesRepository = preferencesRepository)
                 })
             }
             entry<Home> { key ->

@@ -1,5 +1,6 @@
 package com.davant.cefiremybookshelf.data.local.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
@@ -7,9 +8,10 @@ import androidx.room.Update
 import com.davant.cefiremybookshelf.data.local.entity.PreferencesEntity
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface PreferencesDao {
 
-    @Query("SELECT * FROM books")
+    @Query("SELECT * FROM preferences WHERE id = :id")
     fun getPreferencesByUser(id:String): Flow<PreferencesEntity>
 
     @Insert

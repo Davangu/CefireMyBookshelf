@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.davant.cefiremybookshelf.data.local.dao.PreferencesDao
 import com.davant.cefiremybookshelf.data.local.entity.PreferencesEntity
 
-@Database(entities = [PreferencesEntity::class], version = 1, exportSchema = false)
+@Database(entities = [PreferencesEntity::class], version = 2, exportSchema = false)
 abstract class PreferencesDatabase: RoomDatabase() {
     abstract fun preferencesDao(): PreferencesDao
     companion object {
