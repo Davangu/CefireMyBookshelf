@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.davant.cefiremybookshelf.data.local.LocalPreferencesRepository
 import com.davant.cefiremybookshelf.domain.model.Preferences
+import com.davant.cefiremybookshelf.domain.repository.PreferencesRepository
 import com.davant.cefiremybookshelf.ui.theme.Main
 import com.davant.cefiremybookshelf.ui.theme.Secondary
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val auth: FirebaseAuth,
     private val navigateToHome: (String) -> Unit,
-    private val preferencesRepository: LocalPreferencesRepository
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName
@@ -60,9 +61,7 @@ class LoginViewModel(
                     preferencesRepository.addPreferences(
                         Preferences(
                             id = auth.currentUser?.uid ?: "",
-                            name = _userName.value.toString(),
-                            primaryColor = Main.toArgb(),
-                            secondaryColor = Secondary.toArgb()
+                            name = _userName.value.toString()
                         )
                     )
                 }
@@ -77,6 +76,14 @@ class LoginViewModel(
         ).addOnCompleteListener {
             if(it.isSuccessful) {
                 Log.i("Login button", "User logged: ${auth.currentUser?.email}")
+                viewModelScope.launch {
+                    preferencesRepository.addPreferences(
+                        Preferences(
+                            id = auth.currentUser?.uid ?: "",
+                            name = _userName.value.toString()
+                        )
+                    )
+                }
                 navigateToHome(_userName.value.toString())
             } else {
                 Log.i("Login button", "User login failed: ${it.exception.toString()}")

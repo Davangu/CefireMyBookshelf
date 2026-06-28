@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class LocalPreferencesRepository(
-    private val preferencesDao: PreferencesDao): PreferencesRepository {
+    private val preferencesDao: PreferencesDao
+): PreferencesRepository {
 
     override fun getPreferencesByUser(userId: String): Flow<Preferences> =
         preferencesDao.getPreferencesByUserStream(userId).map {
