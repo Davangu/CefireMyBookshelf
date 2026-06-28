@@ -80,7 +80,8 @@ fun Password(password: String, isLoginError: Boolean, updatePassword: (String) -
         },
         visualTransformation = if (passVisibility) PasswordVisualTransformation()
         else VisualTransformation.None,
-        isError = isLoginError
+        isError = isLoginError,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
     )
 }
 
